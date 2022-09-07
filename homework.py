@@ -62,9 +62,13 @@ class Running(Training):
     coeff_calorie_2: int = 20
 
     def get_spent_calories(self) -> float:
-        return ((self.coeff_calorie_1 * self.get_mean_speed()
-                - self.coeff_calorie_2) * self.weight / self.M_IN_KM
-                * self.duration * self.TIME_IN_MIN)
+        return ((self.coeff_calorie_1
+                 * self.get_mean_speed()
+                 - self.coeff_calorie_2)
+                * self.weight
+                / self.M_IN_KM
+                * self.duration
+                * self.TIME_IN_MIN)
 
 
 class SportsWalking(Training):
@@ -82,9 +86,15 @@ class SportsWalking(Training):
         self.height = height
 
     def get_spent_calories(self) -> float:
-        return (self.coeff_1 * self.weight + (self.get_mean_speed() **
-                                              self.number // self.height) *
-                self.coeff_2 * self.weight) * self.duration * self.TIME_IN_MIN
+        return ((self.coeff_1
+                * self.weight
+                + (self.get_mean_speed()
+                   ** self.number
+                   // self.height)
+                * self.coeff_2
+                * self.weight)
+                * self.duration
+                * self.TIME_IN_MIN)
 
 
 class Swimming(Training):
@@ -104,12 +114,16 @@ class Swimming(Training):
         self.count_poll = count_pool
 
     def get_mean_speed(self) -> float:
-        return (self.length_poll * self.count_poll / self.M_IN_KM /
-                self.duration)
+        return (self.length_poll
+                * self.count_poll
+                / self.M_IN_KM
+                / self.duration)
 
     def get_spent_calories(self) -> float:
-        return ((self.get_mean_speed() + self.coeff_swiming_1) *
-                self.coeff_swiming_2 * self.weight)
+        return ((self.get_mean_speed()
+                 + self.coeff_swiming_1)
+                * self.coeff_swiming_2
+                * self.weight)
 
 
 def read_package(workout_type: str, data: list) -> Training:
