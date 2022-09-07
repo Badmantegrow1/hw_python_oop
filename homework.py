@@ -1,9 +1,9 @@
 from dataclasses import dataclass
+from typing import Sequence
 
 
 @dataclass
 class InfoMessage:
-    """Информационное сообщение о тренировке."""
     training_type: str
     duration: float
     distance: float
@@ -19,7 +19,6 @@ class InfoMessage:
 
 
 class Training:
-    """Базовый класс тренировки."""
     M_IN_KM: int = 1000
     LEN_STEP: float = 0.65
     TIME_IN_MIN: int = 60
@@ -34,19 +33,15 @@ class Training:
         self.weight = weight
 
     def get_distance(self) -> float:
-        """Получить дистанцию в км."""
         return self.action * self.LEN_STEP / self.M_IN_KM
 
     def get_mean_speed(self) -> float:
-        """Получить среднюю скорость движения."""
         return self.get_distance() / self.duration
 
     def get_spent_calories(self) -> float:
-        """Получить количество затраченных калорий."""
         pass
 
     def show_training_info(self) -> InfoMessage:
-        """Вернуть информационное сообщение о выполненной тренировке."""
         return InfoMessage(
             type(self).__name__,
             self.duration,
@@ -57,14 +52,13 @@ class Training:
 
 
 class Running(Training):
-    """Тренировка: бег."""
-    coeff_calorie_1: int = 18
-    coeff_calorie_2: int = 20
+    FIRST_COEFFICIENT: int = 18
+    SECOND_COEFFICIENT: int = 20
 
     def get_spent_calories(self) -> float:
-        return ((self.coeff_calorie_1
+        return ((self.FIRST_COEFFICIENT
                  * self.get_mean_speed()
-                 - self.coeff_calorie_2)
+                 - self.SECOND_COEFFICIENT)
                 * self.weight
                 / self.M_IN_KM
                 * self.duration
@@ -72,10 +66,9 @@ class Running(Training):
 
 
 class SportsWalking(Training):
-    """Тренировка: спортивная ходьба."""
-    coeff_1: float = 0.035
-    coeff_2: float = 0.029
-    number: int = 2
+    FIRST_COEFFICIENT: float = 0.035
+    SECOND_COEFFICIENT: float = 0.029
+    NUMBER: int = 2
 
     def __init__(self,
                  action: int,
@@ -86,22 +79,21 @@ class SportsWalking(Training):
         self.height = height
 
     def get_spent_calories(self) -> float:
-        return ((self.coeff_1
+        return ((self.FIRST_COEFFICIENT
                 * self.weight
                 + (self.get_mean_speed()
-                   ** self.number
+                   ** self.NUMBER
                    // self.height)
-                * self.coeff_2
+                * self.SECOND_COEFFICIENT
                 * self.weight)
                 * self.duration
                 * self.TIME_IN_MIN)
 
 
 class Swimming(Training):
-    """Тренировка: плавание."""
     LEN_STEP: float = 1.38
-    coeff_swiming_1: float = 1.1
-    coeff_swiming_2: int = 2
+    FIRST_COEFFICIENT: float = 1.1
+    SECOND_COEFFICIENT: int = 2
 
     def __init__(self,
                  action: int,
@@ -121,13 +113,12 @@ class Swimming(Training):
 
     def get_spent_calories(self) -> float:
         return ((self.get_mean_speed()
-                 + self.coeff_swiming_1)
-                * self.coeff_swiming_2
+                 + self.FIRST_COEFFICIENT)
+                * self.SECOND_COEFFICIENT
                 * self.weight)
 
 
-def read_package(workout_type: str, data: list) -> Training:
-    """Прочитать данные полученные от датчиков."""
+def read_package(workout_type: str, data: Sequence[int]) -> Training:
     type_of_training = {
         'SWM': Swimming,
         'RUN': Running,
@@ -140,7 +131,6 @@ def read_package(workout_type: str, data: list) -> Training:
 
 
 def main(training: Training) -> None:
-    """Главная функция."""
     info = training.show_training_info()
     print(info.get_message())
 
