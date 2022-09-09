@@ -130,8 +130,8 @@ def read_package(workout_type: str, data: List[int]) -> Training:
     return type_of_training[workout_type](*data)
 
 
-def main(training_1: Training) -> None:
-    info = training_1.show_training_info()
+def main(training: Training) -> None:
+    info = training.show_training_info()
     print(info.get_message())
 
 
